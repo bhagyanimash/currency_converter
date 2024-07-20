@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function MainPage() {
   // states for the field
@@ -7,6 +8,7 @@ export default function MainPage() {
   const [targetCurrency, setTargetCurrency] = useState("");
   const [amountInSourceCurrency, setAmountInSourceCurrency] = useState(0);
   const [amountInTargetCurrency, setAmountInTargetCurrency] = useState(0);
+  const [currencyNames, setCurrencyNames] = useState([]);
 
   // handleSubmit method
   const handleSubmit = (e) => {
@@ -19,6 +21,21 @@ export default function MainPage() {
       amountInSourceCurrency
     );
   };
+
+  // get all currency names
+  useEffect(() => {
+    const getCurrencyNames = async () => {
+      try {
+        const rensponce = await axios.get(
+          "http://localhost:5000:getAllCurrencies"
+        );
+        setCurrencyNames(rensponce.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getCurrencyNames();
+  }, []);
 
   return (
     <div>
